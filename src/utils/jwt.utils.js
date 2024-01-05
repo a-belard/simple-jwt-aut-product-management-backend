@@ -1,7 +1,10 @@
-import jwt from "jsonwebtoken";
-import { v4 as uuidv4 } from "uuid";
+import { config } from "dotenv";
+import jwt from 'jsonwebtoken';
+import { v4 as uuidv4 } from 'uuid';
 
-const secret = process.env.JWT_KEY || "";
+config({ path: "./.env" });
+
+const secret = process.env.JWT_KEY || '';
 
 export const signToken = (payload) => {
   const iat = Math.floor(Date.now() / 1000) - 60;
@@ -13,7 +16,6 @@ export const signToken = (payload) => {
       ...payload,
       iat,
       exp,
-      scope: payload.method === "GET" ? "read:service" : "write:service",
       jti,
     },
     secret

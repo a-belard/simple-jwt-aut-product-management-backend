@@ -1,19 +1,11 @@
-const cors = require("cors");
-const morgan = require("morgan");
-const express = require("express");
-import swaggerUi from "swagger-ui-express";
-import userRoutes from "./src/routes/user.routes.js";
-import productRoutes from "./src/routes/product.routes.js";
+import app from "./src/app.js";
+import { config } from "dotenv";
+config({
+  path: "./.env",
+});
+import { connectDB } from "./src/utils/database.js";
 
-const app = express();
-
-// middlewares
-app.use(cors());
-app.use(morgan("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-
-app.use("/doc", swaggerUi.serve, swaggerUi.setup(swaggerJson));
-
-app.use("/users", userRoutes);
-app.use("/products", productRoutes);
+app.listen(process.env.PORT, async () => {
+  console.log(`Server started on port ${process.env.PORT}`);
+  await connectDB();
+});
